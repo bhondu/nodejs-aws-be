@@ -18,7 +18,10 @@ export const getProductById: APIGatewayProxyHandler = async event => {
     if (!product) {
       return {
         statusCode: 404,
-        headers: cors(event),
+        headers: {
+          ...cors(event),
+          'Content-Type': 'text/html',
+        },
         body: `Product ${id} not found`,
       };
     }

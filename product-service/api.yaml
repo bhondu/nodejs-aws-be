@@ -1,0 +1,97 @@
+openapi: 3.0.0
+
+info:
+  title: nodejs-aws-be
+  description: Fake API for nodejs-aws-be [task 03](https://github.com/rolling-scopes-school/nodejs-aws-tasks/blob/main/task3-product-api/task.md)
+  version: 0.0.1
+
+servers:
+  - url: 'https://ydrurck6qi.execute-api.eu-west-1.amazonaws.com/dev'
+
+paths:
+  /product:
+    get:
+      summary: Returns a list of products.
+      responses:
+        '200':
+          description: A JSON array of Products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /product/available:
+    get:
+      summary: Returns a list of available products (count > 0).
+      responses:
+        '200':
+          description: A JSON array of Products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  '/product/{id}':
+    get:
+      summary: Returns a Product by Id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product Id.
+          schema:
+            type: string
+            default: 'bb463b8b-b76c-4f6a-9726-65ab5730b69b'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found
+          content:
+            text/html; chartset=utf-8:
+              schema:
+                type: string
+
+components:
+  schemas:
+    Product:
+      properties:
+        id:
+          type: string
+          description: uuid
+        title:
+          type: string
+          description: Product title
+        description:
+          type: string
+          description: Product description
+        country:
+          type: string
+          description: Product origin coutry
+        count:
+          type: number
+          description: Available count
+        color:
+          type: string
+          description: Product color
+        price:
+          type: number
+          description: Product price
+        image:
+          type: string
+          description: Product image url
+      required:
+        - id
+        - title
+        - description
+        - country
+        - count
+        - color
+        - price
+        - image
