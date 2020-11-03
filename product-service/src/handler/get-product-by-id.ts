@@ -1,19 +1,13 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
 import { fetchProducts } from '../util/product-mock';
-import { cors, handleError } from '../util/response';
+import { cors, handleError, json } from '../util/response';
 
-export const getProductById: APIGatewayProxyHandler = async event => {
-  return handleError(async () => {
-    console.log('event', JSON.stringify(event));
-
+export const getProductById: APIGatewayProxyHandler = async event =>
+  handleError(async () => {
     const id = event.pathParameters?.id;
-    console.log('id', id);
-
     const products = await fetchProducts();
-
     const product = products.find(p => p.id === id);
-    console.log('product', product);
 
     if (!product) {
       return {
@@ -29,7 +23,6 @@ export const getProductById: APIGatewayProxyHandler = async event => {
     return {
       statusCode: 200,
       headers: cors(event),
-      body: JSON.stringify(product, null, 2),
+      body: json(product),
     };
   });
-};

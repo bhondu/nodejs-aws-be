@@ -12,7 +12,7 @@ export const eventMockDefaults: APIGatewayProxyEvent = {
   queryStringParameters: null,
   multiValueQueryStringParameters: null,
   stageVariables: null,
-  requestContext: {} as APIGatewayEventRequestContextWithAuthorizer<{}>,
+  requestContext: <APIGatewayEventRequestContextWithAuthorizer<{}>>{},
   resource: '',
 };
 
