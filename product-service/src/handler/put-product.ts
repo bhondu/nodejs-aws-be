@@ -3,7 +3,7 @@ import 'source-map-support/register';
 import { cors, handleError, json } from '../util/response';
 import { Client } from 'pg';
 import { pgClientConfig } from '../pg/util';
-import { createProducts, updateProduct } from '../pg/sql';
+import { createProducts, createStocks, updateProduct } from '../pg/sql';
 import { Product, productSchema } from '../model/product';
 import { createProductMock } from '../util/product-mock';
 import { ValidationResult } from 'joi';
@@ -14,17 +14,19 @@ export const putProduct: APIGatewayProxyHandler = async event =>
 
     const product: Product = JSON.parse(event?.body || '');
     let updatedProduct: Product;
+    console.log('product', product);
 
     const validationResult: ValidationResult = productSchema.validate(product);
+    console.log('validationResult', validationResult);
 
-    if (validationResult.errors) {
+    if (validationResult.error) {
       return {
         statusCode: 400,
         headers: {
           ...cors(event),
           'Content-Type': 'text/html',
         },
-        body: json(validationResult),
+        body: json(validationResult.error),
       };
     }
 
@@ -39,13 +41,24 @@ export const putProduct: APIGatewayProxyHandler = async event =>
 
     try {
       let result;
+
+      await client.query('BEGIN');
+
       if (product.id) {
         result = await client.query(updateProduct(product));
       } else {
         result = await client.query(createProducts([product]));
       }
       updatedProduct = result.rows[0];
-      console.log(product);
+      updatedProduct.count = product.count;
+
+      await client.query(createStocks([updatedProduct]));
+      console.log(updatedProduct);
+
+      await client.query('COMMIT');
+    } catch (e) {
+      await client.query('ROLLBACK');
+      throw e;
     } finally {
       await client.end();
     }

@@ -9,8 +9,6 @@ export const getProductListAvailable: APIGatewayProxyHandler = async event =>
   handleError(async () => {
     console.log('Incoming event', event);
 
-    console.log('Incoming event', event);
-
     let products = [];
     const client = new Client(pgClientConfig);
 

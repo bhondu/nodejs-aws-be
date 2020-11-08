@@ -14,7 +14,7 @@ export const getProductById: APIGatewayProxyHandler = async event =>
 
     if (!id) {
       return {
-        statusCode: 401,
+        statusCode: 400,
         headers: {
           ...cors(event),
           'Content-Type': 'text/html',

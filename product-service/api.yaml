@@ -38,6 +38,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid Product model supplied. JOI [ValidationError](https://joi.dev/api/?v=17.3.0#validationerror) is returned.
   /product/available:
     get:
       tags: [ product-service ]

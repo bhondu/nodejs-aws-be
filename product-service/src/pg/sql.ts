@@ -14,11 +14,11 @@ create table if not exists products (
 export const createStocksTable = `
 create table if not exists stocks (
   product_id uuid,
-  count integer,
+  count integer constraint min_count check (count >=0),
   foreign key ("product_id") references "products" ("id")
 )`;
 
-export const escape = (s: string) => s.replace(/'/g, "''");
+export const escape = (s: string) => s?.replace(/'/g, "''") || '';
 
 export const productToQuery = ({ title, description, price, country, color, image }: Product) =>
   `('${escape(title)}', '${escape(description)}', ${price}, '${escape(country)}', '${escape(color)}', '${escape(image)}')`;
