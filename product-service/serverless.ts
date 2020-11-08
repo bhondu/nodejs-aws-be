@@ -26,6 +26,9 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      PG_HOST: 'nodejs-aws-be.cupqagybo1vs.eu-west-1.rds.amazonaws.com',
+      PG_PORT: '5432',
+      PG_DATABASE: 'task04',
     },
   },
   functions: {
@@ -64,6 +67,24 @@ const serverlessConfiguration: Serverless = {
           },
         },
       ],
+    },
+    putProduct: {
+      handler: 'handler.putProduct',
+      events: [
+        {
+          http: {
+            method: 'put',
+            path: 'product',
+            cors: true,
+          },
+        },
+      ],
+    },
+    pgClient: {
+      handler: 'handler.pgClient',
+    },
+    createDBProducts: {
+      handler: 'handler.createDBProducts',
     },
   },
 };
