@@ -19,7 +19,7 @@ export const putProduct: APIGatewayProxyHandler = async event =>
 
     if (validationResult.errors) {
       return {
-        statusCode: 401,
+        statusCode: 400,
         headers: {
           ...cors(event),
           'Content-Type': 'text/html',
