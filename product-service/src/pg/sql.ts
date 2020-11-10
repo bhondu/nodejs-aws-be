@@ -51,15 +51,15 @@ select * from products;
 `;
 
 export const getProductsWithStocks = `
-select id, title, description, price, 'count', country, color, image from products p left join stocks s on p.id = s.product_id;
+select id, title, description, price, count, country, color, image from products p left join stocks s on p.id = s.product_id;
 `;
 
 export const getProductWithStocksById = (id: string) => `
-select id, title, description, price, 'count', country, color, image from products p left join stocks s on p.id = s.product_id
+select id, title, description, price, count, country, color, image from products p left join stocks s on p.id = s.product_id
   where p.id = '${id}';
 `;
 
 export const getProductsWithStocksAvailable = `
-select id, title, description, price, 'count', country, color, image from products p left join stocks s on p.id = s.product_id
+select id, title, description, price, count, country, color, image from products p left join stocks s on p.id = s.product_id
   where s.count > 0;
 `;
