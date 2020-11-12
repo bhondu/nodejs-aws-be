@@ -1,13 +1,40 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
-import { fetchProducts } from '../util/product-mock';
 import { cors, handleError, json } from '../util/response';
+import { Client } from 'pg';
+import { pgClientConfig } from '../pg/util';
+import { getProductWithStocksById } from '../pg/sql';
+import { Product } from 'src/model/product';
 
 export const getProductById: APIGatewayProxyHandler = async event =>
   handleError(async () => {
+    console.log('Incoming event', event);
+
     const id = event.pathParameters?.id;
-    const products = await fetchProducts();
-    const product = products.find(p => p.id === id);
+
+    if (!id) {
+      return {
+        statusCode: 400,
+        headers: {
+          ...cors(event),
+          'Content-Type': 'text/html',
+        },
+        body: 'Product id is required',
+      };
+    }
+
+    let product: Product;
+    const client = new Client(pgClientConfig);
+
+    await client.connect();
+
+    try {
+      const { rows } = await client.query(getProductWithStocksById(id));
+      product = rows[0];
+      console.log(product);
+    } finally {
+      await client.end();
+    }
 
     if (!product) {
       return {

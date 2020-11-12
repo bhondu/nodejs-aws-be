@@ -11,6 +11,7 @@ servers:
 paths:
   /product:
     get:
+      tags: [ product-service ]
       summary: Returns a list of products.
       responses:
         '200':
@@ -21,8 +22,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+    put:
+      tags: [ product-service ]
+      summary: Create or update a product.
+      description: When id is provided in the request, a product is updated, otherwise a new product is created.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Created or Updated Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid Product model supplied. JOI [ValidationError](https://joi.dev/api/?v=17.3.0#validationerror) is returned.
   /product/available:
     get:
+      tags: [ product-service ]
       summary: Returns a list of available products (count > 0).
       responses:
         '200':
@@ -35,6 +55,7 @@ paths:
                   $ref: '#/components/schemas/Product'
   '/product/{id}':
     get:
+      tags: [ product-service ]
       summary: Returns a Product by Id.
       parameters:
         - name: id
@@ -87,11 +108,7 @@ components:
           type: string
           description: Product image url
       required:
-        - id
         - title
         - description
         - country
         - count
-        - color
-        - price
-        - image

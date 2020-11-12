@@ -12,11 +12,12 @@ export const handleError = async (cb: () => APIGatewayProxyResult | Promise<APIG
   try {
     return await cb();
   } catch (error) {
-    return {
+    console.log('caught error', error);
+    return Promise.resolve({
       statusCode: 500,
       statusMessage: 'Internal Server Error',
       body: JSON.stringify(error),
       stackTrace: error.stack,
-    };
+    });
   }
 };
