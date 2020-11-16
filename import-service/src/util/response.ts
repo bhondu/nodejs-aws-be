@@ -1,9 +1,10 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResult } from 'aws-lambda';
 
-export const cors = (event: APIGatewayProxyEvent) => ({
+export const cors = () => ({
   'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Origin': event?.headers?.origin || '',
-  'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'OPTIONS,POST,PUT,GET',
+  'Access-Control-Allow-Credentials': true,
 });
 
 export const json = (result: unknown) => JSON.stringify(result, null, 2);

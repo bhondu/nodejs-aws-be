@@ -1,6 +1,6 @@
 import type { Serverless } from 'serverless/aws';
 
-const BUCKET = 'bhondu-nodejs-aws-be-import-service';
+import { Bucket, folderUploaded } from './src/const/const';
 
 const serverlessConfiguration: Serverless = {
   service: {
@@ -30,12 +30,12 @@ const serverlessConfiguration: Serverless = {
       {
         Effect: 'Allow',
         Action: 's3:ListBucket',
-        Resource: [`arn:aws:s3:::${BUCKET}`],
+        Resource: [`arn:aws:s3:::${Bucket}`],
       },
       {
         Effect: 'Allow',
         Action: 's3:*',
-        Resource: [`arn:aws:s3:::${BUCKET}/*`],
+        Resource: [`arn:aws:s3:::${Bucket}/*`],
       },
     ],
     apiGateway: {
@@ -65,16 +65,16 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    imageUpload: {
-      handler: 'handler.imageUpload',
+    importFileParser: {
+      handler: 'handler.importFileParser',
       events: [
         {
           s3: {
-            bucket: BUCKET,
+            bucket: Bucket,
             event: 's3:ObjectCreated:*',
             rules: [
               {
-                prefix: 'images/',
+                prefix: folderUploaded,
                 suffix: '',
               },
             ],
