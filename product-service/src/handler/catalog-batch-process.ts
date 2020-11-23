@@ -79,7 +79,7 @@ export function notify(sns: SNS, topic: string, product: Product) {
       MessageAttributes: {
         price: {
           DataType: 'Number',
-          StringValue: product.price.toString(),
+          StringValue: product.price?.toString(),
         },
       },
     },
