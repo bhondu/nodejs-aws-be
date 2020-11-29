@@ -17,4 +17,7 @@ export const productSchema = Joi.object().keys({
   description: Joi.string().trim().required(),
   price: Joi.number().required().greater(0),
   count: Joi.number().required().greater(0),
+  country: Joi.string(),
+  color: Joi.string(),
+  image: Joi.string().uri(),
 });

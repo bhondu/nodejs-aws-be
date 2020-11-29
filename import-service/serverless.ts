@@ -1,6 +1,6 @@
 import type { Serverless } from 'serverless/aws';
 
-import { Bucket, folderUploaded } from './src/const/const';
+import { Bucket, catalogItemsQueue, folderUploaded } from './src/const/const';
 
 const serverlessConfiguration: Serverless = {
   service: {
@@ -37,12 +37,19 @@ const serverlessConfiguration: Serverless = {
         Action: 's3:*',
         Resource: [`arn:aws:s3:::${Bucket}/*`],
       },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: `\${cf:product-service-dev.${catalogItemsQueue}Arn}`,
+      },
     ],
     apiGateway: {
       minimumCompressionSize: 1024,
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      [catalogItemsQueue]: `\${cf:product-service-dev.${catalogItemsQueue}}`,
+      [catalogItemsQueue + 'Arn']: `\${cf:product-service-dev.${catalogItemsQueue}Arn}`,
     },
   },
   functions: {
