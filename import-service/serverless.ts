@@ -2,6 +2,23 @@ import type { Serverless } from 'serverless/aws';
 
 import { Bucket, catalogItemsQueue, folderUploaded, region } from './src/const/const';
 
+const getGatewayResponseConfig = (ResponseType: string) => ({
+  Type: 'AWS::ApiGateway::GatewayResponse',
+  Properties: {
+    ResponseParameters: {
+      'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+      'gatewayresponse.header.Access-Control-Allow-Credentials': "'true'",
+    },
+    ResponseType,
+    RestApiId: {
+      Ref: 'ApiGatewayRestApi',
+    },
+    ResponseTemplates: {
+      'application/json': '{"message": $context.error.messageString}',
+    },
+  },
+});
+
 const serverlessConfiguration: Serverless = {
   service: {
     name: 'import-service',
@@ -115,32 +132,10 @@ const serverlessConfiguration: Serverless = {
   },
   resources: {
     Resources: {
-      GatewayResponseDenied: {
-        Type: 'AWS::ApiGateway::GatewayResponse',
-        Properties: {
-          ResponseParameters: {
-            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
-            'gatewayresponse.header.Access-Control-Allow-Credentials': "'true'",
-          },
-          ResponseType: 'ACCESS_DENIED',
-          RestApiId: {
-            Ref: 'ApiGatewayRestApi',
-          },
-        },
-      },
-      GatewayResponseUnauthorized: {
-        Type: 'AWS::ApiGateway::GatewayResponse',
-        Properties: {
-          ResponseParameters: {
-            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
-            'gatewayresponse.header.Access-Control-Allow-Credentials': "'true'",
-          },
-          ResponseType: 'UNAUTHORIZED',
-          RestApiId: {
-            Ref: 'ApiGatewayRestApi',
-          },
-        },
-      },
+      GatewayResponseDenied: getGatewayResponseConfig('ACCESS_DENIED'),
+      GatewayResponseUnauthorized: getGatewayResponseConfig('UNAUTHORIZED'),
+      GatewayResponseDEFAULT4XX: getGatewayResponseConfig('DEFAULT_4XX'),
+      GatewayResponseDEFAULT5XX: getGatewayResponseConfig('DEFAULT_5XX'),
     },
   },
 };
