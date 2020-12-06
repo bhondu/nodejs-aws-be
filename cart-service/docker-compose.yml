@@ -1,0 +1,21 @@
+version: '2.4'
+
+services:
+  #######################################################################
+  # Cart Service
+  #######################################################################
+  bhondu-nodejs-aws-cart:
+    container_name: bhondu-nodejs-aws-cart
+    image: bhondu-nodejs-aws-cart
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: bhondu-nodejs-aws-cart
+    environment:
+      NODE_ENV: production
+    ports:
+      - "4000:4000"
+#    healthcheck:
+#      test: 'curl -I http://localhost:4000 || exit 1'
+#      retries: 60
+#      interval: 1s
