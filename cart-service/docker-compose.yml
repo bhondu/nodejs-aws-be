@@ -13,6 +13,7 @@ services:
       target: bhondu-nodejs-aws-cart
     environment:
       NODE_ENV: production
+      ENV_CONFIGURATION: dev
     ports:
       - "4000:4000"
 #    healthcheck:
