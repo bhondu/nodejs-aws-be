@@ -1,0 +1,18 @@
+# ignore git files
+**/.git
+
+# ignore local dependencies
+**/node_modules/
+
+# ignore local build files
+**/dist
+
+# ignore local dev files
+**/npm-debug.log
+**/README.md
+**/LICENSE
+**/.vscode
+**/coverage
+**/.env
+**/.editorconfig
+**/.aws
